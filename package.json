@@ -1,0 +1,41 @@
+{
+  "name": "wintip",
+  "version": "1.0.0",
+  "description": "创建简单的窗口提示框，移动端设备注入调试用",
+  "module": "src/wintip.js",
+  "main": "src/wintip.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node build/server",
+    "build": "rimraf dist && node build",
+    "release": "bash build/release.sh"
+  },
+  "files": ["src/*", "README.md", "dist/*"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vv314/win-tip.git"
+  },
+  "keywords": ["window", "wintip", "console", "webview", "webview 调试", "移动端调试"],
+  "author": "Vincent <vv314@foxmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/vv314/win-tip/issues"
+  },
+  "homepage": "https://github.com/vv314/win-tip#readme",
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "chalk": "^2.0.1",
+    "gzip-size": "^3.0.0",
+    "rimraf": "^2.6.1",
+    "rollup": "^0.45.2",
+    "rollup-plugin-buble": "^0.15.0",
+    "rollup-plugin-commonjs": "^8.1.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-re": "^1.0.6",
+    "shelljs": "^0.7.8",
+    "uglify-js": "^3.0.27"
+  }
+}
