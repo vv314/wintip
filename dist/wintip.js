@@ -9,10 +9,6 @@ function query(selector) {
   return document.querySelectorAll(selector)
 }
 
-function likeNumber(value) {
-  return !isNaN(Number(value))
-}
-
 function isElement(ele) {
   return typeof ele === 'object' && ele.nodeType === 1
 }
@@ -30,22 +26,13 @@ var settings = {
   opacity: 0.75
 };
 
-function winTip(msg, name) {
-  var id = query('._win_tip').length + 1;
-  var tip = query(("._tip_" + (name ? name : id)));
+function winTip(msg) {
+  var idNo = query('._win_tip').length + 1;
+  var idStr = "_tip_" + idNo;
+  var tip = query(("." + idStr));
   var tipBox = query('._win_tip_box');
 
   if (!settings.output) { return }
-
-  if (likeNumber(name) && !tip.length) {
-    alert(("wintip: " + name + " is not defined"));
-    return
-  }
-
-  var idStr =
-    likeNumber(name) || typeof name === 'undefined'
-      ? ("_tip_" + id)
-      : ("_tip_" + id + " _tip_" + name);
 
   var tipHtml = "<span class=\"_win_tip " + idStr + "\" style=\"display: inline-block;min-width: 80px;padding: 8px;margin-bottom: 1px;background-color: rgba(0, 0, 0, " + (settings.opacity) + ");\">" + msg + "</span><br>";
 

@@ -23,13 +23,22 @@ const settings = {
   opacity: 0.75
 }
 
-function winTip(msg) {
-  const idNo = query('._win_tip').length + 1
-  const idStr = `_tip_${idNo}`
-  const tip = query(`.${idStr}`)
+function winTip(msg, name) {
+  const id = query('._win_tip').length + 1
+  const tip = query(`._tip_${name ? name : id}`)
   const tipBox = query('._win_tip_box')
 
   if (!settings.output) return
+
+  if (likeNumber(name) && !tip.length) {
+    alert(`wintip: ${name} is not defined`)
+    return
+  }
+
+  const idStr =
+    likeNumber(name) || typeof name === 'undefined'
+      ? `_tip_${id}`
+      : `_tip_${id} _tip_${name}`
 
   const tipHtml = `<span class="_win_tip ${idStr}" style="display: inline-block;min-width: 80px;padding: 8px;margin-bottom: 1px;background-color: rgba(0, 0, 0, ${settings.opacity});">${msg}</span><br>`
 
