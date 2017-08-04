@@ -5,11 +5,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
   <title>wintip</title>
+  <style>
+    .title {
+      font-size: 3em;
+    }
+    body {
+      background-color: #ffd;
+    }
+  </style>
 </head>
 
 <body>
   <header>
-    <h1>hello wintip</h1>
+    <h1 class="title">Hello wintip!</h1>
   </header>
   <main>
     <div id="div">test page</div>
@@ -24,16 +32,18 @@
     // wintip('hehe');  // 新建内容，id自增
 
     /* global wintip */
-    wintip('好还是')
-    wintip('打开就打开的')
-    wintip(JSON.stringify(window.location)+JSON.stringify(window.location))
-    wintip(JSON.stringify(window.location)+JSON.stringify(window.location))
-    wintip('hehe: ')
+    wintip('hello', 'wintip')
+    wintip('old message')
+    wintip('auto stringify object:', window.location)
 
-    wintip('wwwwwwwww', 'la')
-    wintip('heihei')
-    wintip.$('fish')('sp')
-    wintip.$(1)('hahah')
+    wintip.$(2)('new message')
+    wintip.$('fish')('named tip')
+    wintip.$('cat')('old named tip')
+    wintip.$('cat')('new named tip')
+
+    wintip(window.location, window.location)
+    wintip('balabala')
+    wintip('balabala...')
   </script>
 </body>
 
