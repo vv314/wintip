@@ -13,7 +13,7 @@
   "files": ["src/*", "README.md", "dist/*"],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vv314/win-tip.git"
+    "url": "git+https://github.com/vv314/wintip.git"
   },
   "keywords": ["window", "wintip", "console", "webview", "webview 调试", "移动端调试"],
   "author": "Vincent <vv314@foxmail.com>",
@@ -22,9 +22,9 @@
     "node": ">=8.0.0"
   },
   "bugs": {
-    "url": "https://github.com/vv314/win-tip/issues"
+    "url": "https://github.com/vv314/wintip/issues"
   },
-  "homepage": "https://github.com/vv314/win-tip#readme",
+  "homepage": "https://github.com/vv314/wintip#readme",
   "devDependencies": {
     "browser-sync": "^2.18.13",
     "chalk": "^2.0.1",
