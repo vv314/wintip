@@ -34,7 +34,7 @@ var settings = {
 function winTip() {
   var idNo = query('._win_tip').length + 1;
   var idStr = "_tip_" + idNo;
-  var tipNode = query(("." + idStr));
+  var tipNode = query(("." + idStr))[0];
 
   return settings.output
     ? fillTipMsg(tipNode, idStr, magicArgs(arguments))
@@ -56,15 +56,15 @@ function fillTipMsg(tipNode, idStr, msg) {
 
   var tipBoxHtml = "<div class=\"_win_tip_box\" style=\"position: fixed;top: 0;left: 0;max-height: 75%;word-break: break-all;max-width: 55%;color: " + (settings.color) + ";font-size: 12px;z-index: 100;overflow: auto;text-shadow: 1px 1px rgba(0, 0, 0, 0.3);-webkit-overflow-scrolling: touch;\">" + tipHtml + "</div>";
 
-  if (tipNode.length) {
-    tipNode[0].textContent = msg;
+  if (tipNode) {
+    tipNode.textContent = msg;
   } else if (tipBox.length) {
     append(tipBox[0], tipHtml);
   } else {
     append('body', tipBoxHtml);
   }
 
-  return tipNode
+  return tipNode || query(("." + idStr))[0]
 }
 
 winTip.remove = function (tip) {
@@ -80,9 +80,9 @@ winTip.config = function (options) {
 };
 
 winTip.$ = function (name) {
-  var tipNode = query(("._tip_" + name));
+  var tipNode = query(("._tip_" + name))[0];
 
-  if ((likeNumber(name) && !tipNode.length) || !name) {
+  if ((likeNumber(name) && !tipNode) || !name) {
     throw new Error('[wintip]: name is not defined')
   }
 
