@@ -1,6 +1,7 @@
 /*!
  * wintip v1.0.0
- * @author Vincent
+ * (c) Vincent
+ * Released under the MIT License.
  */
 var wintip = (function () {
 'use strict';
