@@ -1,7 +1,7 @@
 {
   "name": "wintip",
-  "version": "1.1.0",
-  "description": "创建简单的窗口提示框，移动端设备注入调试用",
+  "version": "1.1.1",
+  "description": "Simple console tools for Webview debugging",
   "module": "src/wintip.js",
   "main": "src/wintip.js",
   "scripts": {
