@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0,user-scalable=no">
   <title>wintip</title>
   <style>
     .title {
@@ -24,15 +24,14 @@
   </main>
   <script src="dist/wintip.js"></script>
   <script>
-    wintip.config({
-
-    })
-    // wintip('name:', 1);  替换指定位置内容，id不能大于已有个数
-    // wintip('name:', 'lala');  新建或替换name为lala的内容
-    // wintip('hehe');  // 新建内容，id自增
-
     /* global wintip */
-    wintip('hello', 'wintip')
+    wintip.config({
+      output: true
+    })
+
+    const tip = wintip('hello')
+    tip.textContent = 'hello wintip'
+
     wintip('old message')
     wintip('auto stringify object:', window.location)
 
@@ -40,10 +39,12 @@
     wintip.$('fish')('named tip')
     wintip.$('cat')('old named tip')
     wintip.$('cat')('new named tip')
+    wintip.$('foo')('new named tip')
 
-    wintip(window.location, window.location)
     wintip('balabala')
     wintip('balabala...')
+
+    wintip.remove('foo')
   </script>
 </body>
 
