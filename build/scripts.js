@@ -14,7 +14,8 @@ shell.mkdir('-p', 'dist/')
 
 const banner = `/*!
  * ${project} v${version}
- * @author Vincent
+ * (c) Vincent
+ * Released under the MIT License.
  */`
 
 let cache
@@ -67,10 +68,10 @@ async function build(cb) {
 
 function minify(code) {
   return uglify.minify(code, {
-    fromString: true,
     output: {
       comments: /^!/
-    }
+    },
+    toplevel: true
   }).code
 }
 
