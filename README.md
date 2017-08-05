@@ -1,9 +1,6 @@
 # wintip
 
-创建简单的窗口提示框，方便移动端设备调试
-
-- wintip.js  标准版
-- wintip.lite.js  精简版
+Simple console tools for Webview debugging.
 
 ## Install
 
@@ -22,5 +19,102 @@ npm install wintip --save
 ```javascript
 import wintip from 'wintip'
 
+wintip('hello wintip')  /** 1 **/
+
+// equals above
 wintip('hello', 'wintip')
+
+// object will be serialized by JSON.stringify
+wintip('My name is', {name: 'wintip'})
+
+// named tip
+wintip.$('foo')('old message')
+
+// remove by name
+wintip.remove('foo')
 ```
+
+## API
+
+### wintip(msg)
+
+Basic usage, create a tip
+```javascript
+wintip('something')
+
+// return element node
+const tip = wintip('message')
+
+tip.textContent = 'new message'
+
+// console.log like
+wintip('My', 'name', 'is', 'wintip')
+
+wintip(tip)
+```
+
+### wintip.config(options)
+
+Global config
+
+```javascript
+wintip.config({
+  output: true,  // if false, hidding all tips
+  opacity: 0.8,  // background opacity
+  color: '#fff'  // text color
+})
+```
+
+### wintip.$(name)
+
+Create a tip with  name
+
+```javascript
+// return a function
+const fooTip = wintip.$('foo')
+
+fooTip('My name is foo')
+
+fooTip('rewrite something else')
+
+// create new tip and set text
+wintip.$('bar')('My name is bar')
+```
+
+### wintip.remove(tip)
+
+Remove a tip
+
+```javascript
+wintip('first tip')
+wintip.$('foo')('foo tip')
+const tip = wintip('bar')
+
+// remove first tip
+wintip.remove(1)
+
+// remove the tip named foo
+wintip.remove('foo')
+
+// remove tip node
+wintip.remove(tip)
+```
+
+### Options
+
+The param of `wintip.config`
+
+#### options.output
+
+`Boolean` If `false`, all tips will be hidden
+
+#### options.color
+
+`String` Text color, default `#fff`
+
+
+#### options.opacity
+
+`Number` Background color, default `0.75`
+
+
