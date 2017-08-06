@@ -15,7 +15,14 @@
     "type": "git",
     "url": "git+https://github.com/vv314/wintip.git"
   },
-  "keywords": ["window", "wintip", "console", "webview", "webview 调试", "移动端调试"],
+  "keywords": [
+    "wintip",
+    "console",
+    "webview",
+    "webview debugging",
+    "webview 调试",
+    "移动端调试"
+  ],
   "author": "Vincent <vv314@foxmail.com>",
   "license": "MIT",
   "engines": {
