@@ -21,7 +21,7 @@ const banner = `/*!
 let cache
 const rollupConf = {
   entry: CONF.entry,
-  format: 'iife',
+  format: 'umd',
   dest: CONF.dest, // equivalent to --output
   cache: cache,
   moduleName: CONF.name,
