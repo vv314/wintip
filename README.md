@@ -4,6 +4,12 @@ Simple console tools for Webview debugging.
 
 ## Install
 
+```html
+<script src="https://unpkg.com/wintip/dist/wintip.min.js"></script>
+```
+
+or
+
 ```bash
 yarn add wintip
 ```
