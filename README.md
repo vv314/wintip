@@ -30,6 +30,12 @@ wintip('My name is', {name: 'wintip'})
 // named tip
 wintip.$('foo')('old message')
 
+// modify named tip
+wintip.$('foo')('new message')
+
+// remove [1]
+wintip.remove(1)
+
 // remove by name
 wintip.remove('foo')
 ```
