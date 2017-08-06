@@ -4,6 +4,7 @@
   "description": "Simple console tools for Webview debugging",
   "module": "src/wintip.js",
   "main": "dist/wintip.js",
+  "unpkg": "dist/wintip.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node build/server",
