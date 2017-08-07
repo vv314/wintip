@@ -44,7 +44,7 @@ function splitArgs(args, name) {
 }
 
 function fillTipMsg(tipNode, idStr, msg) {
-  const tipBox = query('._win_tip_box')
+  const tipBox = query('._win_tip_box')[0]
 
   const tipHtml = `<span class="_win_tip ${idStr}" style="display: inline-block;min-width: 80px;padding: 8px;margin-bottom: 1px;background-color: rgba(0, 0, 0, ${settings.opacity});">${msg}</span><br>`
 
@@ -52,8 +52,11 @@ function fillTipMsg(tipNode, idStr, msg) {
 
   if (tipNode) {
     tipNode.textContent = msg
-  } else if (tipBox.length) {
-    append(tipBox[0], tipHtml)
+  } else if (tipBox) {
+    append(tipBox, tipHtml)
+
+    // scroll to bottom
+    tipBox.scrollTop = tipBox.offsetHeight
   } else {
     append('body', tipBoxHtml)
   }
