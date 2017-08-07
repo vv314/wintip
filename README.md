@@ -6,20 +6,20 @@ Simple console tools for Webview debugging.
 
 ## Install
 
+```bash
+yarn add wintip -D
+```
+
+or
+
+```bash
+npm install wintip -D
+```
+
+also
+
 ```html
 <script src="https://unpkg.com/wintip/dist/wintip.min.js"></script>
-```
-
-or
-
-```bash
-yarn add wintip
-```
-
-or
-
-```bash
-npm install wintip --save
 ```
 
 ## Usage
