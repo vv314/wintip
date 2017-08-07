@@ -30,11 +30,11 @@ function winTip() {
   const tipNode = query(`.${idStr}`)[0]
 
   return settings.output
-    ? fillTipMsg(tipNode, idStr, magicArgs(arguments))
+    ? fillTipMsg(tipNode, idStr, splitArgs(arguments))
     : null
 }
 
-function magicArgs(args, name) {
+function splitArgs(args, name) {
   let res = ''
   ;[].slice.call(args).forEach(e => {
     res += ' ' + (typeof e === 'object' ? JSON.stringify(e) : e)
@@ -90,7 +90,7 @@ winTip.$ = name => {
       ? fillTipMsg(
           tipNode,
           idStr,
-          magicArgs(arguments, likeNumber(name) ? '' : name)
+          splitArgs(arguments, likeNumber(name) ? '' : name)
         )
       : null
   }
