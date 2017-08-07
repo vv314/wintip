@@ -1,0 +1,8 @@
+sudo: false
+language: node_js
+node_js: "8"
+env:
+  global:
+    - BUILD_TIMEOUT=10000
+install: yarn
+script: npm run build
