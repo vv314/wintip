@@ -1,11 +1,11 @@
 const gzipSize = require('gzip-size')
 const path = require('path')
-const util = require('util')
+const promisify = require('util.promisify')
 const chalk = require('chalk')
 const fs = require('fs')
 
 function write(dest, code, msg = '') {
-  const writeFile = util.promisify(fs.writeFile)
+  const writeFile = promisify(fs.writeFile)
   return writeFile(dest, code)
     .then(() => {
       console.log(chalk.blueBright(path.relative(process.cwd(), dest)), msg)
