@@ -4,6 +4,8 @@ const cjs = require('rollup-plugin-commonjs')
 const node = require('rollup-plugin-node-resolve')
 const buble = require('rollup-plugin-buble')
 const replace = require('rollup-plugin-re')
+const postcss = require('rollup-plugin-postcss')
+const cssnext = require('postcss-cssnext')
 const uglify = require('uglify-js')
 const version = process.env.VERSION || process.env.npm_package_version
 const project = process.env.npm_package_name
@@ -28,6 +30,9 @@ const rollupConf = {
   sourceMap: true,
   banner,
   plugins: [
+    postcss({
+      plugins: [cssnext()]
+    }),
     node(),
     cjs(),
     replace({

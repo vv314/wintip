@@ -1,3 +1,5 @@
+import './style.css'
+
 function query(selector) {
   return document.querySelectorAll(selector)
 }
@@ -6,8 +8,12 @@ function likeNumber(value) {
   return !isNaN(Number(value))
 }
 
-function isElement(ele) {
-  return typeof ele === 'object' && ele.nodeType === 1
+function isElement(target) {
+  return typeof target === 'object' && target.nodeType === 1
+}
+
+function isFunc(target) {
+  return typeof target === 'function'
 }
 
 function append(ele, html) {
@@ -16,6 +22,10 @@ function append(ele, html) {
   } else {
     query(ele)[0].insertAdjacentHTML('beforeend', html)
   }
+}
+
+const context = {
+  tips: {}
 }
 
 const settings = {
@@ -43,47 +53,47 @@ function splitArgs(args, name) {
   return (name ? `[${name}] ` : '') + res.substring(1)
 }
 
-function fillTipMsg(tipNode, idStr, msg) {
+function genTipHtml(idStr, msg, options) {
+  return `<span class="_win_tip ${idStr}">${msg}</span><br>`
+}
+
+function genTipBoxHtml(tipHtml) {
+  return `<div class="_win_tip_box">${tipHtml}</div>`
+}
+
+function decorateTip(tipNode, options) {
+  if (!options) return tipNode
+
+  if (options.color) {
+    tipNode.style.color = options.color
+  }
+
+  return tipNode
+}
+
+function fillTipMsg(tipNode, idStr, msg, options) {
   const tipBox = query('._win_tip_box')[0]
-
-  const tipHtml = `<span class="_win_tip ${idStr}" style="display: inline-block;min-width: 80px;padding: 8px;margin-bottom: 1px;background-color: rgba(0, 0, 0, ${settings.opacity});">${msg}</span><br>`
-
-  const tipBoxHtml = `<div class="_win_tip_box" style="position: fixed;top: 0;left: 0;max-height: 75%;word-break: break-all;max-width: 55%;color: ${settings.color};font-size: 12px;z-index: 100;overflow: auto;text-shadow: 1px 1px rgba(0, 0, 0, 0.3);-webkit-overflow-scrolling: touch;">${tipHtml}</div>`
+  const tipHtml = genTipHtml(idStr, msg, options)
 
   if (tipNode) {
     tipNode.textContent = msg
-  } else if (tipBox) {
+    return decorateTip(tipNode, options)
+  }
+
+  if (tipBox) {
     append(tipBox, tipHtml)
 
     // scroll to bottom
     tipBox.scrollTop = tipBox.scrollHeight
   } else {
-    append('body', tipBoxHtml)
+    append('body', genTipBoxHtml(tipHtml))
   }
 
-  return tipNode || query(`.${idStr}`)[0]
+  return query(`.${idStr}`)[0]
 }
 
-winTip.remove = tip => {
-  const node = isElement(tip) ? tip : query(`._tip_${tip}`)[0]
-  if (node) {
-    node.nextElementSibling.remove()
-    node.remove()
-  }
-}
-
-winTip.config = options => {
-  Object.assign(settings, options)
-}
-
-winTip.$ = name => {
-  const tipNode = query(`._tip_${name}`)[0]
-
-  if ((likeNumber(name) && !tipNode) || !name) {
-    throw new Error('[wintip]: name is not defined')
-  }
-
-  return function() {
+function generateTipfn(name, tipNode, options) {
+  const tipFn = function() {
     const idNo = query('._win_tip').length + 1
     const idStr = likeNumber(name)
       ? `_tip_${idNo}`
@@ -93,10 +103,41 @@ winTip.$ = name => {
       ? fillTipMsg(
           tipNode,
           idStr,
-          splitArgs(arguments, likeNumber(name) ? '' : name)
+          splitArgs(arguments, likeNumber(name) ? '' : name),
+          options
         )
       : null
   }
+
+  tipFn['__name'] = name
+
+  return tipFn
+}
+
+winTip.remove = tip => {
+  const node = isElement(tip)
+    ? tip
+    : query(`._tip_${isFunc(tip) ? tip['__name'] : tip}`)[0]
+
+  if (node) {
+    node.nextElementSibling.remove()
+    node.remove()
+  }
+  tip = null
+}
+
+winTip.config = options => {
+  Object.assign(settings, options)
+}
+
+winTip.$ = (name, options = {}) => {
+  const tipNode = query(`._tip_${name}`)[0]
+
+  if ((likeNumber(name) && !tipNode) || !name) {
+    throw new Error('[wintip]: name is not defined')
+  }
+
+  return generateTipfn(name, tipNode, options)
 }
 
 export default winTip

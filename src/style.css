@@ -1,0 +1,22 @@
+._win_tip_box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  max-height: 75%;
+  word-break: break-all;
+  max-width: 55%;
+  color: #fff;
+  font-size: 12px;
+  z-index: 100;
+  overflow: auto;
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.3);
+  -webkit-overflow-scrolling: touch;
+}
+
+._win_tip {
+  display: inline-block;
+  min-width: 80px;
+  padding: 8px;
+  margin-bottom: 1px;
+  background-color: rgba(0, 0, 0, .75);
+}

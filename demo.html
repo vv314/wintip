@@ -36,15 +36,18 @@
     wintip('auto stringify object:', window.location)
 
     wintip.$(2)('new message')
-    wintip.$('fish')('named tip')
+    wintip.$('fish', {color: 'red'})('named tip')
     wintip.$('cat')('old named tip')
-    wintip.$('cat')('new named tip')
-    wintip.$('foo')('new named tip')
+    wintip.$('cat', {color: 'yellow'})('new named tip')
+    wintip.$('cat')('ssssss')
+    const foo = wintip.$('foo')
+    foo('new named tip')
 
     wintip('balabala')
     wintip('balabala...')
 
-    wintip.remove('foo')
+    wintip.remove(foo)
+    foo('haha')
   </script>
 </body>
 

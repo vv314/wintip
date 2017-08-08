@@ -15,3 +15,6 @@ bs.watch('src/**/*.js').on('change', file => {
   buildScript().then(bs.reload)
 })
 
+bs.watch('src/**/*.css').on('change', file => {
+  buildScript().then(bs.reload)
+})
