@@ -56,7 +56,7 @@ function fillTipMsg(tipNode, idStr, msg) {
     append(tipBox, tipHtml)
 
     // scroll to bottom
-    tipBox.scrollTop = tipBox.offsetHeight
+    tipBox.scrollTop = tipBox.scrollHeight
   } else {
     append('body', tipBoxHtml)
   }
