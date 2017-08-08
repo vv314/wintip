@@ -2,7 +2,7 @@
   "name": "wintip",
   "version": "1.1.5",
   "description": "Simple console tools for Webview debugging",
-  "module": "src/wintip.js",
+  "module": "dist/wintip.js",
   "main": "dist/wintip.js",
   "unpkg": "dist/wintip.js",
   "scripts": {
@@ -11,11 +11,7 @@
     "build": "rimraf dist && cross-env NODE_ENV=prod node build/scripts",
     "release": "bash build/release.sh"
   },
-  "files": [
-    "src/*",
-    "README.md",
-    "dist/*"
-  ],
+  "files": ["src/*", "README.md", "dist/*"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vv314/wintip.git"
