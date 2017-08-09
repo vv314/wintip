@@ -26,28 +26,47 @@
   <script>
     /* global wintip */
     wintip.config({
-      output: true
+      output: true,
     })
 
+    // return a element
     const tip = wintip('hello')
     tip.textContent = 'hello wintip'
 
     wintip('old message')
     wintip('auto stringify object:', window.location)
 
+    // named tip
+    const namedTip = wintip.$('vincent')
+    namedTip('say hello')
+
+    // named tip with color options
+    const fishOrange = wintip.$('fish', {color: 'orange'})
+    fishOrange('hello')
+    fishOrange('freestyle')
+
+    wintip.$('cat', {color: 'yellow'})('old cat tip')
+
+    // extend color options
+    wintip.$('cat')('new cat tip')
+
+    // chennge the second message
     wintip.$(2)('new message')
-    wintip.$('fish', {color: 'red'})('named tip')
-    wintip.$('cat')('old named tip')
-    wintip.$('cat', {color: 'yellow'})('new named tip')
-    wintip.$('cat')('ssssss')
+
     const foo = wintip.$('foo')
-    foo('new named tip')
+    foo('foo tip')
+
+    wintip.$('baz')('baz tip')
+
+    // remove foo tip object
+    wintip.remove(foo)
+
+    // remove tip named 'baz'
+    wintip.remove('baz')
 
     wintip('balabala')
     wintip('balabala...')
 
-    wintip.remove(foo)
-    foo('haha')
   </script>
 </body>
 
