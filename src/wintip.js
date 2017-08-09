@@ -49,13 +49,12 @@ const settings = {
   color: '#fff'
 }
 
-function winTip() {
+function winTip(...args) {
   const idStr = getNewTipId()
   const tipNode = query(`.${idStr}`)
+  const output = settings.output && args.length
 
-  return settings.output
-    ? fillTipMsg(tipNode, [idStr], splitArgs(arguments))
-    : null
+  return output ? fillTipMsg(tipNode, [idStr], splitArgs(args)) : void 0
 }
 
 function getNewTipId(name) {
@@ -65,24 +64,22 @@ function getNewTipId(name) {
 }
 
 function splitArgs(args, name) {
-  let res = ''
-  ;[].slice.call(args).forEach(e => {
-    res += ' ' + (typeof e === 'object' ? JSON.stringify(e) : e)
-  })
+  const res = args
+    .map(e => (typeof e === 'object' ? JSON.stringify(e) : e))
+    .join(' ')
 
-  return (name ? `[${name}] ` : '') + res.substring(1)
+  return name ? `[${name}] ${res}` : res
 }
 
 function genTipFragment(idArr, msg, options) {
   const fragment = document.createDocumentFragment()
   const tip = createEl('span')
-  const br = createEl('br')
 
   tip.className = [TIP_CLASS_NAME, ...idArr].join(' ')
   tip.textContent = msg
 
   append(fragment, tipDecorator(tip, options))
-  append(fragment, br)
+  append(fragment, createEl('br'))
 
   return fragment
 }
@@ -133,16 +130,17 @@ function fillTipMsg(tipNode, idArr, msg, options) {
 }
 
 function generateTipFn(name = '', tipNode, options) {
-  function tipFn() {
+  function tipFn(...args) {
     const idArr = likeNumber(name)
       ? [getNewTipId()]
       : [getNewTipId(), getNewTipId(name)]
+    const output = settings.output && args.length
 
-    return settings.output
+    return output
       ? fillTipMsg(
           tipNode || query(`.${getNewTipId(name)}`),
           idArr,
-          splitArgs(arguments, likeNumber(name) ? '' : name),
+          splitArgs(args, likeNumber(name) ? '' : name),
           options
         )
       : null
@@ -155,6 +153,8 @@ function generateTipFn(name = '', tipNode, options) {
 
 winTip.remove = tip => {
   let node = null
+
+  if (!tip) return
 
   if (isElement(tip)) {
     node = tip
