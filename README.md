@@ -4,11 +4,9 @@ Simple console tools for Webview debugging.
 
 [![Travis](https://img.shields.io/travis/vv314/wintip.svg?style=flat-square)](https://travis-ci.org/vv314/wintip) [![npm](https://img.shields.io/npm/dw/wintip.svg?style=flat-square)](https://www.npmjs.com/package/wintip) [![npm](https://img.shields.io/npm/v/wintip.svg?style=flat-square)](https://www.npmjs.com/package/wintip) [![npm](https://img.shields.io/npm/l/wintip.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-![wintip](https://github.com/vv314/wintip/blob/master/screenshots/wintip.png)
-
+![wintip](https://raw.githubusercontent.com/vv314/wintip/master/screenshots/wintip.png)
 
 ## Installation
-
 
 ```bash
 yarn add wintip
@@ -39,8 +37,8 @@ wintip('How', 'are', 'you')
 // Customize the tip color
 const colorTip = wintip.$({color: 'yellow'})
 
-colorTip('I am yellow :)')
-colorTip('I am yellow too ;)')
+colorTip('I am yellow')
+colorTip('I am yellow too!')
 ```
 
 ## API
@@ -65,7 +63,7 @@ tip.textContent = 'new message'
 
 ### wintip.config(opts)
 
-- **output** {`Boolean`}
+- **output** {`Boolean`} Control display or not.
 - **opacity** {`Number`} Background opacity, range `0~1`, default `0.75`.
 - **color** {`String`} base color of the tip, default `#fff`
 
@@ -78,6 +76,23 @@ wintip.config({
 })
 ```
 
+### wintip.$(opts)
+- **color** {`String`} specify the tip color, expect `HEX` or `RGB` value.
+
+Create a tip with options.
+
+```javascript
+const yellowTip = wintip.$({color: 'yellow'})
+const orangeTip = wintip.$({color: 'orange'})
+
+orangeTip('I am orange')
+yellowTip('I am yellow')
+yellowTip('I am yellow too!')
+
+// Quick usage
+wintip.$({color: 'green'})('balabala')
+```
+
 ### wintip.$(name [, opts])
 
 - **name** {`String` | `Number`} name of the tip.
@@ -86,20 +101,19 @@ wintip.config({
 
 
 Create a tip with names and options(optional).
+Note: the named tip can be reused.
 
 ```javascript
 // Return a tip function
 const fooTip = wintip.$('foo')
 
-fooTip('My name is foo')
+fooTip('origin message')
 
-fooTip('Write something else in the same tip')
+fooTip('Rewrite new message in the same place')
 
 // Quick usage
 wintip.$('bar')('balabala')
 ```
-
-### wintip.$(opts)
 
 ### wintip.remove(target)
 
