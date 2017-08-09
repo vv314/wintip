@@ -4,7 +4,7 @@ Simple console tools for Webview debugging.
 
 [![Travis](https://img.shields.io/travis/vv314/wintip.svg?style=flat-square)](https://travis-ci.org/vv314/wintip) [![npm](https://img.shields.io/npm/dw/wintip.svg?style=flat-square)](https://www.npmjs.com/package/wintip) [![npm](https://img.shields.io/npm/v/wintip.svg?style=flat-square)](https://www.npmjs.com/package/wintip) [![npm](https://img.shields.io/npm/l/wintip.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-![wintip](./wintip.png)
+![wintip](https://github.com/vv314/wintip/blob/master/screenshots/wintip.png)
 
 
 ## Installation
