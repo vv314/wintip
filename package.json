@@ -1,6 +1,6 @@
 {
   "name": "wintip",
-  "version": "1.1.5",
+  "version": "1.2.0",
   "description": "Simple console tools for Webview debugging",
   "module": "dist/wintip.js",
   "main": "dist/wintip.js",
