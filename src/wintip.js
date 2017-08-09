@@ -1,7 +1,23 @@
 import './style.css'
 
+const BOX_CLASS_NAME = '_win_tip_box'
+const TIP_CLASS_NAME = '_win_tip'
+const TIP_ID_PREFIX = '_tip_'
+const TIP_FUNC_NAME = '__name'
+
+// start from 1
+let tipNo = 1
+
 function query(selector) {
+  return document.querySelector(selector)
+}
+
+function querys(selector) {
   return document.querySelectorAll(selector)
+}
+
+function createEl(tag) {
+  return document.createElement(tag)
 }
 
 function likeNumber(value) {
@@ -9,23 +25,22 @@ function likeNumber(value) {
 }
 
 function isElement(target) {
-  return typeof target === 'object' && target.nodeType === 1
+  // Element or Fragment
+  return (
+    (typeof target === 'object' && target.nodeType === 1) ||
+    target.nodeType === 11
+  )
 }
 
 function isFunc(target) {
   return typeof target === 'function'
 }
 
-function append(ele, html) {
-  if (isElement(ele)) {
-    ele.insertAdjacentHTML('beforeend', html)
-  } else {
-    query(ele)[0].insertAdjacentHTML('beforeend', html)
-  }
-}
+function append(ele, dom) {
+  ele = isElement(ele) ? ele : query(ele)
+  ele.appendChild(dom)
 
-const context = {
-  tips: {}
+  return ele
 }
 
 const settings = {
@@ -35,13 +50,18 @@ const settings = {
 }
 
 function winTip() {
-  const idNo = query('._win_tip').length + 1
-  const idStr = `_tip_${idNo}`
-  const tipNode = query(`.${idStr}`)[0]
+  const idStr = getNewTipId()
+  const tipNode = query(`.${idStr}`)
 
   return settings.output
-    ? fillTipMsg(tipNode, idStr, splitArgs(arguments))
+    ? fillTipMsg(tipNode, [idStr], splitArgs(arguments))
     : null
+}
+
+function getNewTipId(name) {
+  name = typeof name === 'undefined' ? tipNo++ : name
+
+  return TIP_ID_PREFIX + name
 }
 
 function splitArgs(args, name) {
@@ -53,15 +73,35 @@ function splitArgs(args, name) {
   return (name ? `[${name}] ` : '') + res.substring(1)
 }
 
-function genTipHtml(idStr, msg, options) {
-  return `<span class="_win_tip ${idStr}">${msg}</span><br>`
+function genTipFragment(idArr, msg, options) {
+  const fragment = document.createDocumentFragment()
+  const tip = createEl('span')
+  const br = createEl('br')
+
+  tip.className = [TIP_CLASS_NAME, ...idArr].join(' ')
+  tip.textContent = msg
+
+  append(fragment, tipDecorator(tip, options))
+  append(fragment, br)
+
+  return fragment
 }
 
-function genTipBoxHtml(tipHtml) {
-  return `<div class="_win_tip_box">${tipHtml}</div>`
+function genTipBoxNode(fragment) {
+  const box = createEl('div')
+
+  box.className = BOX_CLASS_NAME
+  box.style.color = settings.color
+
+  return append(box, fragment)
 }
 
-function decorateTip(tipNode, options) {
+function tipDecorator(tipNode, options) {
+  // handle global option firstly
+  if (settings.opacity != 0.75) {
+    tipNode.style.backgroundColor = `rgba(0, 0, 0, ${settings.opacity})`
+  }
+
   if (!options) return tipNode
 
   if (options.color) {
@@ -71,59 +111,65 @@ function decorateTip(tipNode, options) {
   return tipNode
 }
 
-function fillTipMsg(tipNode, idStr, msg, options) {
-  const tipBox = query('._win_tip_box')[0]
-  const tipHtml = genTipHtml(idStr, msg, options)
+function fillTipMsg(tipNode, idArr, msg, options) {
+  const tipBox = query(`.${BOX_CLASS_NAME}`)
+  const tipFragment = genTipFragment(idArr, msg, options)
 
   if (tipNode) {
     tipNode.textContent = msg
-    return decorateTip(tipNode, options)
+    return tipDecorator(tipNode, options)
   }
 
   if (tipBox) {
-    append(tipBox, tipHtml)
+    append(tipBox, tipFragment)
 
     // scroll to bottom
     tipBox.scrollTop = tipBox.scrollHeight
   } else {
-    append('body', genTipBoxHtml(tipHtml))
+    append(document.body, genTipBoxNode(tipFragment))
   }
 
-  return query(`.${idStr}`)[0]
+  return query(`.${idArr.join(' .')}`)
 }
 
-function generateTipfn(name, tipNode, options) {
-  const tipFn = function() {
-    const idNo = query('._win_tip').length + 1
-    const idStr = likeNumber(name)
-      ? `_tip_${idNo}`
-      : `_tip_${idNo} _tip_${name}`
+function generateTipFn(name = '', tipNode, options) {
+  function tipFn() {
+    const idArr = likeNumber(name)
+      ? [getNewTipId()]
+      : [getNewTipId(), getNewTipId(name)]
 
     return settings.output
       ? fillTipMsg(
-          tipNode,
-          idStr,
+          tipNode || query(`.${getNewTipId(name)}`),
+          idArr,
           splitArgs(arguments, likeNumber(name) ? '' : name),
           options
         )
       : null
   }
 
-  tipFn['__name'] = name
+  tipFn[TIP_FUNC_NAME] = name
 
   return tipFn
 }
 
 winTip.remove = tip => {
-  const node = isElement(tip)
-    ? tip
-    : query(`._tip_${isFunc(tip) ? tip['__name'] : tip}`)[0]
+  let node = null
 
-  if (node) {
-    node.nextElementSibling.remove()
-    node.remove()
+  if (isElement(tip)) {
+    node = tip
+  } else if (isFunc(tip)) {
+    node = query(`.${getNewTipId(tip[TIP_FUNC_NAME])}`)
+  } else if (likeNumber(tip)) {
+    node = querys(`.${TIP_CLASS_NAME}`)[tip]
+  } else {
+    node = query(`.${getNewTipId(tip)}`)
   }
-  tip = null
+
+  if (!node) return
+
+  node.nextElementSibling.remove()
+  node.remove()
 }
 
 winTip.config = options => {
@@ -131,13 +177,15 @@ winTip.config = options => {
 }
 
 winTip.$ = (name, options = {}) => {
-  const tipNode = query(`._tip_${name}`)[0]
+  if (typeof name === 'object') return generateTipFn('', null, name)
 
-  if ((likeNumber(name) && !tipNode) || !name) {
-    throw new Error('[wintip]: name is not defined')
+  const tipNode = query(`.${getNewTipId(name)}`)
+
+  if (likeNumber(name) && !tipNode) {
+    throw new Error(`[wintip]: name ${name} is not defined`)
   }
 
-  return generateTipfn(name, tipNode, options)
+  return generateTipFn(name, tipNode, options)
 }
 
 export default winTip
