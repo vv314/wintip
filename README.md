@@ -1,19 +1,23 @@
-# wintip
+# Wintip
 
 Simple console tools for Webview debugging.
 
 [![Travis](https://img.shields.io/travis/vv314/wintip.svg?style=flat-square)](https://travis-ci.org/vv314/wintip) [![npm](https://img.shields.io/npm/dw/wintip.svg?style=flat-square)](https://www.npmjs.com/package/wintip) [![npm](https://img.shields.io/npm/v/wintip.svg?style=flat-square)](https://www.npmjs.com/package/wintip) [![npm](https://img.shields.io/npm/l/wintip.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-## Install
+![wintip](./wintip.png)
+
+
+## Installation
+
 
 ```bash
-yarn add wintip -D
+yarn add wintip
 ```
 
 or
 
 ```bash
-npm install wintip -D
+npm install wintip
 ```
 
 also
@@ -27,75 +31,77 @@ also
 ```javascript
 import wintip from 'wintip'
 
-wintip('hello wintip')  /** 1 **/
+wintip('Hello wintip')
 
-// equals above
-wintip('hello', 'wintip')
+// Pass multiple parameters
+wintip('How', 'are', 'you')
 
-// object will be serialized by JSON.stringify
-wintip('My name is', {name: 'wintip'})
+// Customize the tip color
+const colorTip = wintip.$({color: 'yellow'})
 
-// named tip
-wintip.$('foo')('old message')
-
-// modify named tip
-wintip.$('foo')('new message')
-
-// remove [1]
-wintip.remove(1)
-
-// remove by name
-wintip.remove('foo')
+colorTip('I am yellow :)')
+colorTip('I am yellow too ;)')
 ```
 
 ## API
 
-### wintip(msg)
+### wintip(msg1 [, msg2, ..., msgN)
 
-Basic usage, create a tip
+Basic function, create a tip on the window.
+
 ```javascript
 wintip('something')
 
-// return element node
+wintip('hello', 'wintip')
+
+// Object will be serialized
+wintip('stringify', {a: 1})
+
+// Return DOM node
 const tip = wintip('message')
 
 tip.textContent = 'new message'
-
-// console.log like
-wintip('My', 'name', 'is', 'wintip')
-
-wintip(tip)
 ```
 
-### wintip.config(options)
+### wintip.config(opts)
 
-Global config
+- **output** {`Boolean`}
+- **opacity** {`Number`} Background opacity, range `0~1`, default `0.75`.
+- **color** {`String`} base color of the tip, default `#fff`
+
+Global config.
 
 ```javascript
 wintip.config({
-  output: true,  // if false, hidding all tips
-  opacity: 0.8,  // background opacity
-  color: '#fff'  // text color
+  output: true,  // If false, hidding all tips
+  color: '#fff'  // Expect `HEX` or `RGB` string.
 })
 ```
 
-### wintip.$(name)
+### wintip.$(name [, opts])
 
-Create a tip with  name
+- **name** {`String` | `Number`} name of the tip.
+- **opts** {`Object`}  optional.
+    - **color** {`String`} specify the tip color, expect `HEX` or `RGB` value.
+
+
+Create a tip with names and options(optional).
 
 ```javascript
-// return a function
+// Return a tip function
 const fooTip = wintip.$('foo')
 
 fooTip('My name is foo')
 
-fooTip('rewrite something else')
+fooTip('Write something else in the same tip')
 
-// create new tip and set text
-wintip.$('bar')('My name is bar')
+// Quick usage
+wintip.$('bar')('balabala')
 ```
 
-### wintip.remove(tip)
+### wintip.$(opts)
+
+### wintip.remove(target)
 
 Remove a tip
 
@@ -104,32 +110,15 @@ wintip('first tip')
 wintip.$('foo')('foo tip')
 const tip = wintip('bar')
 
-// remove first tip
+// Remove first tip in window
 wintip.remove(1)
 
-// remove the tip named foo
+// Remove the tip named foo
 wintip.remove('foo')
 
-// remove tip node
+// Remove tip node
 wintip.remove(tip)
 ```
-
-### Options
-
-The param of `wintip.config`
-
-#### options.output
-
-`Boolean` If `false`, all tips will be hidden
-
-#### options.color
-
-`String` Text color, default `#fff`
-
-
-#### options.opacity
-
-`Number` Background color, default `0.75`
 
 ## License
 
