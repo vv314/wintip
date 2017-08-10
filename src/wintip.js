@@ -65,7 +65,7 @@ function getNewTipId(name) {
 
 function splitArgs(args, name) {
   const res = args
-    .map(e => (typeof e === 'object' ? JSON.stringify(e) : e))
+    .map(e => (typeof e === 'object' ? JSON.stringify(e) : '' + e))
     .join(' ')
 
   return name ? `[${name}] ${res}` : res
