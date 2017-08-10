@@ -63,9 +63,9 @@ tip.textContent = 'new message'
 
 ### wintip.config(opts)
 
-- **output** {`Boolean`} Control display or not.
-- **opacity** {`Number`} Background opacity, range `0~1`, default `0.75`.
-- **color** {`String`} base color of the tip, default `#fff`
+- **output** { `Boolean` } Control display or not.
+- **opacity** { `Number` } Background opacity, range `0~1`, default `0.75`.
+- **color** { `String` } base color of the tip, default `#fff`
 
 Global config.
 
@@ -77,7 +77,7 @@ wintip.config({
 ```
 
 ### wintip.$(opts)
-- **color** {`String`} specify the tip color, expect `HEX` or `RGB` value.
+- **color** { `String` } specify the tip color, expect `HEX` or `RGB` value.
 
 Create a tip with options.
 
@@ -95,9 +95,9 @@ wintip.$({color: 'green'})('balabala')
 
 ### wintip.$(name [, opts])
 
-- **name** {`String` | `Number`} name of the tip.
-- **opts** {`Object`}  optional.
-    - **color** {`String`} specify the tip color, expect `HEX` or `RGB` value.
+- **name** { `String` | `Number` } name of the tip.
+- **opts** { `Object` }  optional.
+    - **color** { `String` } specify the tip color, expect `HEX` or `RGB` value.
 
 
 Create a tip with names and options(optional).
