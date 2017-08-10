@@ -20,7 +20,7 @@
     <h1 class="title">Hello wintip!</h1>
   </header>
   <main>
-    <div id="div">test page</div>
+    <div id="div">By Vincent</div>
   </main>
   <script src="dist/wintip.js"></script>
   <script>
@@ -31,28 +31,25 @@
     })
 
     // return a element
-    const tip = wintip('hello')
-    tip.textContent = 'hello wintip'
+    const tip = wintip('origin message')
+    tip.textContent = 'Hello Wintip!'
 
-    wintip('old message')
-    wintip('auto stringify object:', window.location)
+    wintip('Auto stringify object:', {name: 'wintip', author: 'Vincent'})
+
+    wintip.$({color: 'yellow'})('Yellow tip')
 
     // named tip
     const namedTip = wintip.$('vincent')
-    namedTip('say hello')
+    namedTip('named tip')
 
     // named tip with color options
     const fishOrange = wintip.$('fish', {color: 'orange'})
     fishOrange('hello')
-    fishOrange('freestyle')
+    fishOrange('named tip with color')
 
-    wintip.$('cat', {color: 'yellow'})('old cat tip')
 
-    // extend color options
-    wintip.$('cat')('new cat tip')
-
-    // chennge the second message
-    wintip.$(2)('new message')
+    // chennge the first message
+    // wintip.$(1)('new message')
 
     const foo = wintip.$('foo')
     foo('foo tip')
@@ -65,9 +62,9 @@
     // remove tip named 'baz'
     wintip.remove('baz')
 
-    wintip('balabala...')
-
     console.log('console.log', 'proxy')
+
+    wintip('balabala...')
 
   </script>
 </body>
