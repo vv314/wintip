@@ -1,4 +1,13 @@
 import './style.css'
+import {
+  query,
+  querys,
+  createEl,
+  likeNumber,
+  isElement,
+  isFunc,
+  append
+} from './utils.js'
 
 const BOX_CLASS_NAME = '_win_tip_box'
 const TIP_CLASS_NAME = '_win_tip'
@@ -7,46 +16,22 @@ const TIP_FUNC_NAME = '__name'
 
 // start from 1
 let tipNo = 1
-
-function query(selector) {
-  return document.querySelector(selector)
-}
-
-function querys(selector) {
-  return document.querySelectorAll(selector)
-}
-
-function createEl(tag) {
-  return document.createElement(tag)
-}
-
-function likeNumber(value) {
-  return !isNaN(Number(value))
-}
-
-function isElement(target) {
-  // Element or Fragment
-  return (
-    (typeof target === 'object' && target.nodeType === 1) ||
-    target.nodeType === 11
-  )
-}
-
-function isFunc(target) {
-  return typeof target === 'function'
-}
-
-function append(ele, dom) {
-  ele = isElement(ele) ? ele : query(ele)
-  ele.appendChild(dom)
-
-  return ele
-}
+const log = console.log
 
 const settings = {
   output: true,
+  console: false,
   opacity: 0.75,
   color: '#fff'
+}
+
+function consoleProxy(flag) {
+  const mlog = function(...args) {
+    winTip.apply(winTip, args)
+    log.apply(console, args)
+  }
+
+  console.log = flag ? mlog : log
 }
 
 function winTip(...args) {
@@ -174,6 +159,7 @@ winTip.remove = tip => {
 
 winTip.config = options => {
   Object.assign(settings, options)
+  consoleProxy(settings.console)
 }
 
 winTip.$ = (name, options = {}) => {

@@ -27,6 +27,7 @@
     /* global wintip */
     wintip.config({
       output: true,
+      console: true // open console.log proxy
     })
 
     // return a element
@@ -65,6 +66,8 @@
     wintip.remove('baz')
 
     wintip('balabala...')
+
+    console.log('console.log', 'proxy')
 
   </script>
 </body>
