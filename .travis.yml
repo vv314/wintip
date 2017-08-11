@@ -1,6 +1,7 @@
 sudo: false
 language: node_js
 node_js: "8"
+cache: yarn
 env:
   global:
     - BUILD_TIMEOUT=10000
