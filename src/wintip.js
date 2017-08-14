@@ -138,19 +138,15 @@ function generateTipFn(name = '', tipNode, options) {
 }
 
 winTip.remove = tip => {
-  let node = null
-
   if (!tip) return
 
-  if (isElement(tip)) {
-    node = tip
-  } else if (isFunc(tip)) {
-    node = query(`.${getNewTipId(tip[TIP_FUNC_NAME])}`)
-  } else if (likeNumber(tip)) {
-    node = querys(`.${TIP_CLASS_NAME}`)[tip]
-  } else {
-    node = query(`.${getNewTipId(tip)}`)
-  }
+  const node = isElement(tip)
+    ? tip
+    : isFunc(tip)
+      ? query(`.${getNewTipId(tip[TIP_FUNC_NAME])}`)
+      : likeNumber(tip)
+        ? querys(`.${TIP_CLASS_NAME}`)[tip]
+        : query(`.${getNewTipId(tip)}`)
 
   if (!node) return
 
