@@ -6,7 +6,8 @@ import {
   likeNumber,
   isElement,
   isFunc,
-  append
+  append,
+  space2dash
 } from './utils.js'
 
 const BOX_CLASS_NAME = '_win_tip_box'
@@ -43,9 +44,9 @@ function winTip(...args) {
 }
 
 function getNewTipId(name) {
-  name = typeof name === 'undefined' ? tipNo++ : name
+  name = name === void 0 ? tipNo++ : name
 
-  return TIP_ID_PREFIX + name
+  return space2dash(TIP_ID_PREFIX + name)
 }
 
 function splitArgs(args, name) {
@@ -171,7 +172,7 @@ winTip.$ = (name, options = {}) => {
     throw new Error(`[wintip]: name ${name} is not defined`)
   }
 
-  return generateTipFn(name, tipNode, options)
+  return generateTipFn(`${name}`.trim(), tipNode, options)
 }
 
 export default winTip

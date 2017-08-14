@@ -33,4 +33,17 @@ function append(ele, dom) {
   return ele
 }
 
-export { query, querys, createEl, likeNumber, isElement, isFunc, append }
+function space2dash(str) {
+  return str.replace(/\s+/g, '_')
+}
+
+export {
+  query,
+  querys,
+  createEl,
+  likeNumber,
+  isElement,
+  isFunc,
+  append,
+  space2dash
+}
