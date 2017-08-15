@@ -156,7 +156,7 @@ winTip.remove = tip => {
 
 winTip.config = options => {
   Object.assign(settings, options)
-  consoleProxy(settings.console)
+  consoleProxy(settings.output && settings.console)
 }
 
 winTip.$ = (name, options = {}) => {
