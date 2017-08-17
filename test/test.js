@@ -1,6 +1,4 @@
-var assert = require('assert')
-
-const aaa = 111
+const assert = require('assert')
 
 describe('Array', function() {
   describe('#indexOf()', function() {
