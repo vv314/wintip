@@ -14,13 +14,16 @@ const BOX_CLASS_NAME = '_win_tip_box'
 const TIP_CLASS_NAME = '_win_tip'
 const TIP_ID_PREFIX = '_tip_'
 const TIP_FUNC_NAME = '__name'
+const WARN_COLOR = 'yellow'
+const ERROR_COLOR = 'red'
 
 // start from 1
 let tipNo = 1
 const log = console.log
 
 const settings = {
-  output: true,
+  // 'default', 'info', 'warn', 'error'
+  output: 'default',
   console: false,
   opacity: 0.75,
   color: '#fff'
@@ -35,12 +38,16 @@ function consoleProxy(flag) {
   console.log = flag ? mlog : log
 }
 
+function isShow(level = 'default') {
+  return settings.output === level || settings.output === true
+}
+
 function winTip(...args) {
   const idStr = getNewTipId()
   const tipNode = query(`.${idStr}`)
-  const output = settings.output && args.length
+  const output = isShow('default') && args.length
 
-  return output ? fillTipMsg(tipNode, [idStr], splitArgs(args)) : void 0
+  return output ? renderTip(tipNode, [idStr], splitArgs(args)) : void 0
 }
 
 function getNewTipId(name) {
@@ -57,20 +64,20 @@ function splitArgs(args, name) {
   return name ? `[${name}] ${res}` : res
 }
 
-function genTipFragment(idArr, msg, options) {
+function createTipFragment(idArr, msg, opts) {
   const fragment = document.createDocumentFragment()
   const tip = createEl('span')
 
   tip.className = [TIP_CLASS_NAME, ...idArr].join(' ')
   tip.textContent = msg
 
-  append(fragment, tipDecorator(tip, options))
+  append(fragment, tipDecorator(tip, opts))
   append(fragment, createEl('br'))
 
   return fragment
 }
 
-function genTipBoxNode(fragment) {
+function createTipBox(fragment) {
   const box = createEl('div')
 
   box.className = BOX_CLASS_NAME
@@ -79,28 +86,30 @@ function genTipBoxNode(fragment) {
   return append(box, fragment)
 }
 
-function tipDecorator(tipNode, options) {
+function tipDecorator(tipNode, opts) {
   // handle global option firstly
   if (settings.opacity != 0.75) {
     tipNode.style.backgroundColor = `rgba(0, 0, 0, ${settings.opacity})`
   }
 
-  if (!options) return tipNode
+  if (!opts) return tipNode
 
-  if (options.color) {
-    tipNode.style.color = options.color
-  }
+  const { color, level } = opts
+
+  if (color) tipNode.style.color = color
+
+  if (level) tipNode.dataset.level = level
 
   return tipNode
 }
 
-function fillTipMsg(tipNode, idArr, msg, options) {
+function renderTip(tipNode, idArr, msg, opts) {
   const tipBox = query(`.${BOX_CLASS_NAME}`)
-  const tipFragment = genTipFragment(idArr, msg, options)
+  const tipFragment = createTipFragment(idArr, msg, opts)
 
   if (tipNode) {
     tipNode.textContent = msg
-    return tipDecorator(tipNode, options)
+    return tipDecorator(tipNode, opts)
   }
 
   if (tipBox) {
@@ -109,25 +118,25 @@ function fillTipMsg(tipNode, idArr, msg, options) {
     // scroll to bottom
     tipBox.scrollTop = tipBox.scrollHeight
   } else {
-    append(document.body, genTipBoxNode(tipFragment))
+    append(document.body, createTipBox(tipFragment))
   }
 
   return query(`.${idArr.join(' .')}`)
 }
 
-function generateTipFn(name = '', tipNode, options) {
+function wintipFactory(name, tipNode, opts) {
   function tipFn(...args) {
     const idArr = likeNumber(name)
       ? [getNewTipId()]
       : [getNewTipId(), getNewTipId(name)]
-    const output = settings.output && args.length
+    const output = isShow(opts.level) && args.length
 
     return output
-      ? fillTipMsg(
+      ? renderTip(
           tipNode || query(`.${getNewTipId(name)}`),
           idArr,
           splitArgs(args, likeNumber(name) ? '' : name),
-          options
+          opts
         )
       : null
   }
@@ -154,13 +163,15 @@ winTip.remove = tip => {
   node.remove()
 }
 
-winTip.config = options => {
-  Object.assign(settings, options)
-  consoleProxy(settings.output && settings.console)
+winTip.config = opts => {
+  Object.assign(settings, opts)
+
+  // consoleProxy is 'default' level
+  consoleProxy(isShow('default') && settings.console)
 }
 
-winTip.$ = (name, options = {}) => {
-  if (typeof name === 'object') return generateTipFn('', null, name)
+winTip.$ = (name, opts = {}) => {
+  if (name && typeof name === 'object') return wintipFactory('', null, name)
 
   const tipNode = query(`.${getNewTipId(name)}`)
 
@@ -168,7 +179,15 @@ winTip.$ = (name, options = {}) => {
     throw new Error(`[wintip]: name ${name} is not defined`)
   }
 
-  return generateTipFn(`${name}`.trim(), tipNode, options)
+  return wintipFactory(`${name}`.trim(), tipNode, opts)
 }
+
+// sugas
+winTip.info = (...args) => winTip.$({ level: 'info' })(args)
+
+winTip.warn = (...args) => winTip.$({ color: WARN_COLOR, level: 'warn' })(args)
+
+winTip.error = (...args) =>
+  winTip.$({ color: ERROR_COLOR, level: 'error' })(args)
 
 export default winTip
