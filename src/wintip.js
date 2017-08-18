@@ -39,7 +39,13 @@ function consoleProxy(flag) {
 }
 
 function isShow(level = 'default') {
-  return settings.output === level || settings.output === true
+  const ranking = ['default', 'info', 'warn', 'error']
+  const outputLevel =
+    ranking.indexOf(settings.output) < 0
+      ? ranking.length
+      : ranking.indexOf(settings.output)
+
+  return ranking.indexOf(level) >= outputLevel || settings.output === true
 }
 
 function winTip(...args) {
@@ -47,7 +53,9 @@ function winTip(...args) {
   const tipNode = query(`.${idStr}`)
   const output = isShow('default') && args.length
 
-  return output ? renderTip(tipNode, [idStr], splitArgs(args)) : void 0
+  // return a empty object({}) when output is false
+  // normaly return a Element object
+  return output ? renderTip(tipNode, [idStr], splitArgs(args)) : {}
 }
 
 function getNewTipId(name) {
@@ -183,11 +191,12 @@ winTip.$ = (name, opts = {}) => {
 }
 
 // sugas
-winTip.info = (...args) => winTip.$({ level: 'info' })(args)
+winTip.info = (...args) => winTip.$({ level: 'info' }).apply(this, args)
 
-winTip.warn = (...args) => winTip.$({ color: WARN_COLOR, level: 'warn' })(args)
+winTip.warn = (...args) =>
+  winTip.$({ color: WARN_COLOR, level: 'warn' }).apply(this, args)
 
 winTip.error = (...args) =>
-  winTip.$({ color: ERROR_COLOR, level: 'error' })(args)
+  winTip.$({ color: ERROR_COLOR, level: 'error' }).apply(this, args)
 
 export default winTip
