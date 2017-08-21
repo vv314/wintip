@@ -88,11 +88,11 @@ Show info-level wintips
 
 ### wintip.warn(msg1 [, msg2, ..., msgN)
 
-Show warn-level wintips, text color is <span style="color:#444;background: #fee381;padding: 2px">#fee381</span>
+Show warn-level wintips, text color is <i style="color:#444;background: #fee381;padding: 2px">#fee381</i>
 
 ### wintip.error(msg1 [, msg2, ..., msgN)
 
-Show error-level wintips, text color is <span style="color:#fff;background: #ff4545;padding: 2px">#ff4545</span>
+Show error-level wintips, text color is <i style="color:#fff;background: #ff4545;padding: 2px">#ff4545</i>
 
 ### wintip.config(opts)
 
