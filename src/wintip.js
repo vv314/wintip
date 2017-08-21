@@ -14,8 +14,8 @@ const BOX_CLASS_NAME = '_win_tip_box'
 const TIP_CLASS_NAME = '_win_tip'
 const TIP_ID_PREFIX = '_tip_'
 const TIP_FUNC_NAME = '__name'
-const WARN_COLOR = 'yellow'
-const ERROR_COLOR = 'red'
+const WARN_COLOR = '#fee381'
+const ERROR_COLOR = '#ff4545'
 
 // start from 1
 let tipNo = 1
