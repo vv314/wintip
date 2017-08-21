@@ -41,6 +41,27 @@ colorTip('I am yellow')
 colorTip('I am yellow too!')
 ```
 
+### Log level
+
+You can specify different levels of wintips by the following methods, and use the   **`output`**  option of the `wintip.config` method to control the output level of the wintip.
+
+- **wintip.info**: info-level logs
+- **wintip.warn**: warn-level logs
+- **wintip.error**: error-level logs
+
+```javascript
+wintip('default level messages')
+
+// Show info-level wintips
+wintip.info('info level messages')
+
+// Show warn-level wintips
+wintip.warn('warn level messages')
+
+// Show error-level wintips
+wintip.error('error level messages')
+```
+
 ## API
 
 ### wintip(msg1 [, msg2, ..., msgN)
@@ -61,18 +82,35 @@ const tip = wintip('message')
 tip.textContent = 'new message'
 ```
 
+### wintip.info(msg1 [, msg2, ..., msgN)
+
+Show info-level wintips
+
+### wintip.warn(msg1 [, msg2, ..., msgN)
+
+Show warn-level wintips, text color is <span style="color:#444;background: #fee381;padding: 2px">#fee381</span>
+
+### wintip.error(msg1 [, msg2, ..., msgN)
+
+Show error-level wintips, text color is <span style="color:#fff;background: #ff4545;padding: 2px">#ff4545</span>
+
 ### wintip.config(opts)
 
-- **output** { `Boolean` } Control display or not.
+- **output** { `String` } Control display level, default `'default'`.
 - **console** { `Boolean` } Proxy console.log method, default `false`
 - **opacity** { `Number` } Background opacity, range `0~1`, default `0.75`.
-- **color** { `String` } base color of the tip, default `#fff`
+- **color** { `String` } base color of the tip, default `'#fff'`, expect `HEX` or `RGB` string.
 
 Global config.
 
 ```javascript
 wintip.config({
-  output: true,  // If false, hidding all tips
+  color: '#fff'  // 
+})
+
+wintip.config({
+  // 'default', 'info', 'warn', 'error'
+  output: false,  // Hidding all tips
   color: '#fff'  // Expect `HEX` or `RGB` string.
 })
 ```
@@ -99,6 +137,7 @@ wintip.$({color: 'green'})('balabala')
 - **name** { `String` | `Number` } name of the tip.
 - **opts** { `Object` }  optional.
     - **color** { `String` } specify the tip color, expect `HEX` or `RGB` value.
+    - **level** {`String`} log level: 'default', 'info', 'warn', 'error'
 
 
 Create a tip with names and options(optional).
