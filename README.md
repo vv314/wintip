@@ -52,13 +52,10 @@ You can specify different levels of wintips by the following methods, and use th
 ```javascript
 wintip('default level messages')
 
-// Show info-level wintips
 wintip.info('info level messages')
 
-// Show warn-level wintips
 wintip.warn('warn level messages')
 
-// Show error-level wintips
 wintip.error('error level messages')
 ```
 
@@ -88,11 +85,11 @@ Show info-level wintips
 
 ### wintip.warn(msg1 [, msg2, ..., msgN)
 
-Show warn-level wintips, text color is <span style="color:#444;background: #fee381;padding: 2px">#fee381</span>
+Show warn-level wintips, text color is *#fee381*
 
 ### wintip.error(msg1 [, msg2, ..., msgN)
 
-Show error-level wintips, text color is <span style="color:#fff;background: #ff4545;padding: 2px">#ff4545</span>
+Show error-level wintips, text color is *#ff4545*
 
 ### wintip.config(opts)
 
