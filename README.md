@@ -50,15 +50,21 @@ You can specify different levels of wintips by the following methods, and use th
 - **wintip.error**: error-level logs
 
 ```javascript
+wintip.config({
+  // 'default', 'info', 'warn', 'error'
+  output: 'warn' // Specify the warn-level
+})
+
+// Below the warn-level，not show
 wintip('default level messages')
 
-// Show info-level wintips
+// Below the warn-level，not show
 wintip.info('info level messages')
 
-// Show warn-level wintips
+// Equal the warn-level, show
 wintip.warn('warn level messages')
 
-// Show error-level wintips
+// Above the warn-level, show
 wintip.error('error level messages')
 ```
 
@@ -88,11 +94,11 @@ Show info-level wintips
 
 ### wintip.warn(msg1 [, msg2, ..., msgN)
 
-Show warn-level wintips, text color is <span style="color:#444;background: #fee381;padding: 2px">#fee381</span>
+Show warn-level wintips, text color is *#fee381*
 
 ### wintip.error(msg1 [, msg2, ..., msgN)
 
-Show error-level wintips, text color is <span style="color:#fff;background: #ff4545;padding: 2px">#ff4545</span>
+Show error-level wintips, text color is *#ff4545*
 
 ### wintip.config(opts)
 
@@ -115,14 +121,15 @@ wintip.config({
 
 ### wintip.$(opts)
 - **color** { `String` } specify the tip color, expect `HEX` or `RGB` value.
+- **level** {`String`} log level: 'default', 'info', 'warn', 'error'
 
 Create a tip with options.
 
 ```javascript
 const yellowTip = wintip.$({color: 'yellow'})
-const orangeTip = wintip.$({color: 'orange'})
+const orangeTip = wintip.$({color: 'orange', level: 'info'})
 
-orangeTip('I am orange')
+orangeTip('I am orange, my level is info')
 yellowTip('I am yellow')
 yellowTip('I am yellow too!')
 
