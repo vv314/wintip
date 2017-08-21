@@ -101,12 +101,10 @@ Show error-level wintips, text color is <span style="color:#fff;background: #ff4
 - **opacity** { `Number` } Background opacity, range `0~1`, default `0.75`.
 - **color** { `String` } base color of the tip, default `'#fff'`, expect `HEX` or `RGB` string.
 
-Global config.
+Global config. Please put it in your entry file or in the main file.
 
 ```javascript
-wintip.config({
-  color: '#fff'  // 
-})
+import wintip from 'wintip'
 
 wintip.config({
   // 'default', 'info', 'warn', 'error'
