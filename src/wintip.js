@@ -7,18 +7,22 @@ import {
   isElement,
   isFunc,
   append,
-  space2dash
+  space2dash,
+  stringify
 } from './utils.js'
 
 const BOX_CLASS_NAME = '_win_tip_box'
 const TIP_CLASS_NAME = '_win_tip'
 const TIP_ID_PREFIX = '_tip_'
+const BOX_SLEEP = '_win_tip_box--sleep'
 const TIP_FUNC_NAME = '__name'
 const WARN_COLOR = '#fee381'
 const ERROR_COLOR = '#ff4545'
+const WEAK_TIME = 30 * 1000
 
 // start from 1
 let tipNo = 1
+let sleepTimer = 0
 const log = console.log
 
 const settings = {
@@ -66,7 +70,7 @@ function getNewTipId(name) {
 
 function splitArgs(args, name) {
   const res = args
-    .map(e => (typeof e === 'object' ? JSON.stringify(e) : '' + e))
+    .map(e => (typeof e === 'object' ? stringify(e) : `${e}`))
     .join(' ')
 
   return name ? `[${name}] ${res}` : res
@@ -90,8 +94,19 @@ function createTipBox(fragment) {
 
   box.className = BOX_CLASS_NAME
   box.style.color = settings.color
+  box.onclick = () => weakUp(box)
 
   return append(box, fragment)
+}
+
+function weakUp(tipBox) {
+  clearTimeout(sleepTimer)
+  tipBox.classList.remove(BOX_SLEEP)
+  setTimeout(sleep, WEAK_TIME, tipBox)
+}
+
+function sleep(tipBox) {
+  tipBox.classList.add(BOX_SLEEP)
 }
 
 function tipDecorator(tipNode, opts) {
@@ -125,6 +140,7 @@ function renderTip(tipNode, idArr, msg, opts) {
 
     // scroll to bottom
     tipBox.scrollTop = tipBox.scrollHeight
+    weakUp(tipBox)
   } else {
     append(document.body, createTipBox(tipFragment))
   }
@@ -191,12 +207,14 @@ winTip.$ = (name, opts = {}) => {
 }
 
 // sugas
-winTip.info = (...args) => winTip.$({ level: 'info' }).apply(this, args)
+winTip.info = (...args) => winTip.$({ level: 'info' }).apply(winTip, args)
 
 winTip.warn = (...args) =>
-  winTip.$({ color: WARN_COLOR, level: 'warn' }).apply(this, args)
+  winTip.$({ color: WARN_COLOR, level: 'warn' }).apply(winTip, args)
 
 winTip.error = (...args) =>
-  winTip.$({ color: ERROR_COLOR, level: 'error' }).apply(this, args)
+  winTip.$({ color: ERROR_COLOR, level: 'error' }).apply(winTip, args)
+
+winTip.version = 'VERSION'
 
 export default winTip

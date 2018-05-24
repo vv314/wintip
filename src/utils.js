@@ -37,13 +37,23 @@ function space2dash(str) {
   return str.replace(/\s+/g, '_')
 }
 
+function stringify(obj) {
+  try {
+    return JSON.stringify(obj)
+  } catch (e) {
+    console.error('[wintip]', "can't print object", obj)
+    return ''
+  }
+}
+
 export {
-  query,
-  querys,
+  append,
   createEl,
-  likeNumber,
   isElement,
   isFunc,
-  append,
-  space2dash
+  likeNumber,
+  query,
+  querys,
+  space2dash,
+  stringify
 }
