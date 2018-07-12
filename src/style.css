@@ -9,8 +9,10 @@
   font-size: 12px;
   z-index: 100;
   overflow: auto;
+  opacity: 1;
   text-shadow: 1px 1px rgba(0, 0, 0, 0.3);
   -webkit-overflow-scrolling: touch;
+  transition: opacity 0.3s;
 }
 
 ._win_tip {
@@ -18,5 +20,11 @@
   min-width: 80px;
   padding: 8px;
   margin-bottom: 1px;
-  background-color: rgba(0, 0, 0, .75);
+  color: inherit;
+  border: 0;
+  background-color: rgba(34, 34, 34, 0.75);
+}
+
+._win_tip_box--sleep {
+  opacity: 0.3;
 }

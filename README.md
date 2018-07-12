@@ -41,6 +41,33 @@ colorTip('I am yellow')
 colorTip('I am yellow too!')
 ```
 
+### Log level
+
+You can specify different levels of wintips by the following methods, and use the   **`output`**  option of the `wintip.config` method to control the output level of the wintip.
+
+- **wintip.info**: info-level logs
+- **wintip.warn**: warn-level logs
+- **wintip.error**: error-level logs
+
+```javascript
+wintip.config({
+  // 'default', 'info', 'warn', 'error'
+  output: 'warn' // Specify the warn-level
+})
+
+// Below the warn-level，not show
+wintip('default level messages')
+
+// Below the warn-level，not show
+wintip.info('info level messages')
+
+// Equal the warn-level, show
+wintip.warn('warn level messages')
+
+// Above the warn-level, show
+wintip.error('error level messages')
+```
+
 ## API
 
 ### wintip(msg1 [, msg2, ..., msgN)
@@ -61,32 +88,48 @@ const tip = wintip('message')
 tip.textContent = 'new message'
 ```
 
+### wintip.info(msg1 [, msg2, ..., msgN)
+
+Show info-level wintips
+
+### wintip.warn(msg1 [, msg2, ..., msgN)
+
+Show warn-level wintips, text color is *#fee381*
+
+### wintip.error(msg1 [, msg2, ..., msgN)
+
+Show error-level wintips, text color is *#ff4545*
+
 ### wintip.config(opts)
 
-- **output** { `Boolean` } Control display or not.
+- **output** { `String` } Control display level, default `'default'`.
 - **console** { `Boolean` } Proxy console.log method, default `false`
 - **opacity** { `Number` } Background opacity, range `0~1`, default `0.75`.
-- **color** { `String` } base color of the tip, default `#fff`
+- **color** { `String` } base color of the tip, default `'#fff'`, expect `HEX` or `RGB` string.
 
-Global config.
+Global config. Please put it in your entry file or in the main file.
 
 ```javascript
+import wintip from 'wintip'
+
 wintip.config({
-  output: true,  // If false, hidding all tips
+  // 'default', 'info', 'warn', 'error'
+  output: false,  // Hidding all tips
   color: '#fff'  // Expect `HEX` or `RGB` string.
 })
 ```
 
 ### wintip.$(opts)
 - **color** { `String` } specify the tip color, expect `HEX` or `RGB` value.
+- **level** {`String`} log level: 'default', 'info', 'warn', 'error'
 
 Create a tip with options.
 
 ```javascript
 const yellowTip = wintip.$({color: 'yellow'})
-const orangeTip = wintip.$({color: 'orange'})
+const orangeTip = wintip.$({color: 'orange', level: 'info'})
 
-orangeTip('I am orange')
+orangeTip('I am orange, my level is info')
 yellowTip('I am yellow')
 yellowTip('I am yellow too!')
 
@@ -99,6 +142,7 @@ wintip.$({color: 'green'})('balabala')
 - **name** { `String` | `Number` } name of the tip.
 - **opts** { `Object` }  optional.
     - **color** { `String` } specify the tip color, expect `HEX` or `RGB` value.
+    - **level** {`String`} log level: 'default', 'info', 'warn', 'error'
 
 
 Create a tip with names and options(optional).

@@ -1,83 +1,103 @@
-const shell = require('shelljs')
-const rollup = require('rollup')
-const cjs = require('rollup-plugin-commonjs')
-const node = require('rollup-plugin-node-resolve')
-const buble = require('rollup-plugin-buble')
-const replace = require('rollup-plugin-re')
+const { rollup } = require('rollup')
+const fs = require('fs-extra')
+const chalk = require('chalk')
+const commonjs = require('rollup-plugin-commonjs')
+const typescript = require('rollup-plugin-typescript2')
+const resolve = require('rollup-plugin-node-resolve')
 const postcss = require('rollup-plugin-postcss')
-const cssnext = require('postcss-cssnext')
-const uglify = require('uglify-js')
+const babel = require('rollup-plugin-buble')
+const replace = require('rollup-plugin-replace')
+const { uglify } = require('rollup-plugin-uglify')
+const { paths, bundles } = require('./config')
 const version = process.env.VERSION || process.env.npm_package_version
 const project = process.env.npm_package_name
-const { write, isProd, baseName, getSize } = require('./utils')
-const CONF = require('./config')
+const { pubDate, handleRollupError, rootPath } = require('./utils')
 
-shell.mkdir('-p', 'dist/')
-
-const banner = `/*!
+const BANNER = `/*!
  * ${project} v${version}
  * (c) Vincent
  * Released under the MIT License.
  */`
 
-let cache
-const rollupConf = {
-  entry: CONF.entry,
-  format: 'umd',
-  dest: CONF.dest, // equivalent to --output
-  cache: cache,
-  moduleName: CONF.name,
-  sourceMap: true,
-  banner,
-  plugins: [
-    postcss({
-      plugins: [cssnext()]
-    }),
-    node(),
-    cjs(),
-    replace({
-      patterns: [
-        {
-          test: '__RUNTIME__',
-          replace: process.env.API === 'prod' ? '' : '_TEST'
-        }
-      ]
-    }),
-    buble()
-  ]
+function getOutputPath(name) {
+  return rootPath(`${paths.dist}/${name}`)
 }
 
-async function build(cb) {
-  const mapPath = `\n//# sourceMappingURL=${baseName(CONF.dest)}.map`
+function getInputPath(name) {
+  return rootPath(`${paths.src}/${name}`)
+}
 
-  try {
-    const { code, map } = await rollup
-      .rollup(rollupConf)
-      .then(bundle => bundle.generate(rollupConf))
+// Errors in promises should be fatal.
+let loggedErrors = new Set()
+process.on('unhandledRejection', err => {
+  if (loggedErrors.has(err)) {
+    // No need to print it twice.
+    process.exit(1)
+  }
+  throw err
+})
 
-    await Promise.all([
-      write(CONF.dest, code + mapPath, getSize(code)),
-      write(`${CONF.dest}.map`, map.toString())
-    ])
-
-    if (isProd()) {
-      const miniCode = minify(code)
-      write(CONF.prod, miniCode, getSize(miniCode, true))
-    }
-  } catch (err) {
-    console.log(err)
+async function createBundle(bundle) {
+  const logKey =
+    chalk.white.bold(bundle.filename) + chalk.dim(` (${bundle.format})`)
+  const rollupConfig = {
+    input: getInputPath(bundle.entry),
+    plugins: [
+      postcss(),
+      resolve(),
+      commonjs(),
+      replace({
+        VERSION: version
+      }),
+      typescript(),
+      // babel(),
+      bundle.minify &&
+        uglify({
+          output: {
+            comments: /^!/
+          }
+        })
+    ].filter(Boolean)
+  }
+  const rollupOutputOptions = {
+    file: getOutputPath(bundle.filename),
+    banner: BANNER,
+    format: bundle.format,
+    interop: false,
+    exports: bundle.exports || 'auto',
+    name: paths.global,
+    sourcemap: false
   }
 
-  return CONF.dest
+  console.log(chalk.bgYellow.black(' BUILDING '), logKey)
+  try {
+    const result = await rollup(rollupConfig)
+    await result.write(rollupOutputOptions)
+  } catch (error) {
+    console.log(chalk.bgRed.black(' OH NOES! '), `${logKey}\n`)
+    loggedErrors.add(error)
+    handleRollupError(error)
+    throw error
+  }
+
+  console.log(
+    chalk.bgGreen.black(' COMPLETE '),
+    `${chalk.white.bold(bundle.filename)}\n`
+  )
 }
 
-function minify(code) {
-  return uglify.minify(code, {
-    output: {
-      comments: /^!/
-    },
-    toplevel: true
-  }).code
+function clean() {
+  return fs.emptyDir(rootPath(paths.dist))
+}
+
+async function bundleAll() {
+  for (const bundle of bundles) {
+    await createBundle(bundle)
+  }
+}
+
+function build() {
+  return clean().then(bundleAll)
 }
 
 build()
