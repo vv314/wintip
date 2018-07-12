@@ -2,6 +2,7 @@ const { rollup } = require('rollup')
 const fs = require('fs-extra')
 const chalk = require('chalk')
 const commonjs = require('rollup-plugin-commonjs')
+const typescript = require('rollup-plugin-typescript2')
 const resolve = require('rollup-plugin-node-resolve')
 const postcss = require('rollup-plugin-postcss')
 const babel = require('rollup-plugin-buble')
@@ -48,7 +49,8 @@ async function createBundle(bundle) {
       replace({
         VERSION: version
       }),
-      babel(),
+      typescript(),
+      // babel(),
       bundle.minify &&
         uglify({
           output: {

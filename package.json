@@ -4,7 +4,8 @@
   "description": "Simple console tools for Webview debugging",
   "main": "lib/wintip.js",
   "modlue": "lib/wintip.esm.js",
-  "unpkg": "lib/wintip.js",
+  "unpkg": "lib/wintip.min.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node build/server",
@@ -50,7 +51,9 @@
     "rollup-plugin-postcss": "^1.6.1",
     "rollup-plugin-re": "^1.0.6",
     "rollup-plugin-replace": "^2.0.0",
+    "rollup-plugin-typescript2": "^0.14.0",
     "rollup-plugin-uglify": "^4.0.0",
+    "typescript": "^2.9.1",
     "uglify-js": "^3.3.27"
   },
   "browserslist": [

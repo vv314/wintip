@@ -6,17 +6,17 @@ const paths = {
 
 const bundles = [
   {
-    entry: 'wintip.js',
+    entry: 'wintip.ts',
     filename: 'wintip.esm.js',
     format: 'esm'
   },
   {
-    entry: 'wintip.js',
+    entry: 'wintip.ts',
     filename: 'wintip.js',
     format: 'umd'
   },
   {
-    entry: 'wintip.js',
+    entry: 'wintip.ts',
     filename: 'wintip.min.js',
     format: 'umd',
     minify: true
