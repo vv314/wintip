@@ -1,8 +1,8 @@
 .rpt2_cache
 .vscode
 .DS_Store
-dist
+lib
 node_modules
 yarn-error.log
 npm-debug.log
-rpt2_cache
+,rpt2_cache
